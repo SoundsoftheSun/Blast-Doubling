@@ -5,6 +5,9 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -25,9 +28,14 @@ public class AbstractFurnaceBlockEntityMixin {
                 ItemStack result = recipeHolder.value().assemble(singleRecipeInput, registryAccess);
                 ItemStack output = nonNullList.get(2);
                 if (!(output.isEmpty()) && ItemStack.isSameItemSameComponents(output, result)) {
-                    output.grow(1);
+                    if (abe.getLevel().getRandom().nextInt(3) == 0) {
+                        output.grow(1);
+                        if (abe.getLevel() instanceof ServerLevel level) {
+                            // find a better sound?
+                            level.playSound(null, abe.getBlockPos(), SoundEvents.ANVIL_HIT, SoundSource.BLOCKS, 0.5f, 5f);
+                        }
+                    }
                 }
-                return true;
             }
             return true;
         }
