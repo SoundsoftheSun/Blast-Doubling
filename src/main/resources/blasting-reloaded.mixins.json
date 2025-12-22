@@ -4,8 +4,7 @@
   "package": "net.soundsofthesun.blastingReloaded.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "AbstractFurnaceBlockEntityMixin",
-    "BlastFurnaceBlockEntityMixin"
+    "AbstractFurnaceBlockEntityMixin"
   ],
   "client": [
   ],
