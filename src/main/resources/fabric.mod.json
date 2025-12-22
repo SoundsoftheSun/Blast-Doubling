@@ -14,12 +14,6 @@
   "icon": "assets/blasting-reloaded/icon.png",
   "environment": "*",
   "entrypoints": {
-    "fabric-datagen": [
-      "net.soundsofthesun.blastingReloaded.client.BlastingReloadedDataGenerator"
-    ],
-    "client": [
-      "net.soundsofthesun.blastingReloaded.client.BlastingReloadedClient"
-    ],
     "main": [
       "net.soundsofthesun.blastingReloaded.BlastingReloaded"
     ]
