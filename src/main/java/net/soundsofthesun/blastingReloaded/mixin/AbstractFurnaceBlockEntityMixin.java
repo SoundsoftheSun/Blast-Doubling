@@ -27,14 +27,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class AbstractFurnaceBlockEntityMixin {
 
     @Inject(method = "getTotalCookTime", at = @At("RETURN"), cancellable = true)
-    private static void getTotalCookTime(ServerLevel serverLevel, AbstractFurnaceBlockEntity abstractFurnaceBlockEntity, CallbackInfoReturnable<Integer> cir) {
+    private static void modGetTotalCookTime(ServerLevel serverLevel, AbstractFurnaceBlockEntity abstractFurnaceBlockEntity, CallbackInfoReturnable<Integer> cir) {
         if (abstractFurnaceBlockEntity instanceof BlastFurnaceBlockEntity) {
             cir.setReturnValue(cir.getReturnValue() * (serverLevel.getAttachedOrElse(BRAttachments.COOK_TIME_DATA, BRCookTime.DEFAULT)).mult() );
         }
     }
 
     @WrapOperation(method = "serverTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity;burn(Lnet/minecraft/core/RegistryAccess;Lnet/minecraft/world/item/crafting/RecipeHolder;Lnet/minecraft/world/item/crafting/SingleRecipeInput;Lnet/minecraft/core/NonNullList;I)Z"))
-    private static boolean burn(RegistryAccess registryAccess, @Nullable RecipeHolder<? extends AbstractCookingRecipe> recipeHolder, SingleRecipeInput singleRecipeInput, NonNullList<ItemStack> nonNullList, int i, Operation<Boolean> original, @Local AbstractFurnaceBlockEntity abe) {
+    private static boolean modBurn(RegistryAccess registryAccess, @Nullable RecipeHolder<? extends AbstractCookingRecipe> recipeHolder, SingleRecipeInput singleRecipeInput, NonNullList<ItemStack> nonNullList, int i, Operation<Boolean> original, @Local AbstractFurnaceBlockEntity abe) {
         if (original.call(registryAccess, recipeHolder, singleRecipeInput, nonNullList, i)) {
             if (abe instanceof BlastFurnaceBlockEntity) {
                 ItemStack result = recipeHolder.value().assemble(singleRecipeInput, registryAccess);
@@ -43,6 +43,8 @@ public class AbstractFurnaceBlockEntityMixin {
                     int doubling = abe.getLevel().getAttachedOrElse(BRAttachments.DOUBLING_DATA, BRDoubling.DEFAULT).denominator();
                     if (doubling == 1) {
                         output.grow(1);
+                    } else if (doubling == 0) {
+                        return true;
                     } else if (abe.getLevel().getRandom().nextInt(doubling) == 0) {
                         output.grow(1);
                         if (abe.getLevel() instanceof ServerLevel level) {
