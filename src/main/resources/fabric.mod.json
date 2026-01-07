@@ -1,25 +1,25 @@
 {
   "schemaVersion": 1,
-  "id": "blasting-reloaded",
+  "id": "blast-doubling",
   "version": "${version}",
-  "name": "Blasting Reloaded",
+  "name": "Blast Doubling",
   "description": "Gives the Blast furnace a chance to produce an extra output. Configurable with /blasting",
   "authors": [
     "SoundsoftheSun"
   ],
   "contact": {
-    "homepage": "https://github.com/SoundsoftheSun/Blasting-Reloaded"
+    "homepage": "https://github.com/SoundsoftheSun/Blast-Doubling"
   },
   "license": "MIT",
-  "icon": "assets/blasting-reloaded/icon.png",
+  "icon": "assets/blast-doubling/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.soundsofthesun.blastingReloaded.BlastingReloaded"
+      "net.soundsofthesun.blastdoubling.BlastDoubling"
     ]
   },
   "mixins": [
-    "blasting-reloaded.mixins.json"
+    "blast-doubling.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=${loader_version}",

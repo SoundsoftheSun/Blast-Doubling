@@ -1,4 +1,4 @@
-package net.soundsofthesun.blastingReloaded.mixin;
+package net.soundsofthesun.blastdoubling.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -14,9 +14,9 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlastFurnaceBlockEntity;
-import net.soundsofthesun.blastingReloaded.attachment.BRAttachments;
-import net.soundsofthesun.blastingReloaded.attachment.BRCookTime;
-import net.soundsofthesun.blastingReloaded.attachment.BRDoubling;
+import net.soundsofthesun.blastdoubling.attachment.BRAttachments;
+import net.soundsofthesun.blastdoubling.attachment.BRCookTime;
+import net.soundsofthesun.blastdoubling.attachment.BRDoubling;
 import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -29,7 +29,7 @@ public class AbstractFurnaceBlockEntityMixin {
     @Inject(method = "getTotalCookTime", at = @At("RETURN"), cancellable = true)
     private static void modGetTotalCookTime(ServerLevel serverLevel, AbstractFurnaceBlockEntity abstractFurnaceBlockEntity, CallbackInfoReturnable<Integer> cir) {
         if (abstractFurnaceBlockEntity instanceof BlastFurnaceBlockEntity) {
-            cir.setReturnValue(cir.getReturnValue() * (serverLevel.getAttachedOrElse(BRAttachments.COOK_TIME_DATA, BRCookTime.DEFAULT)).mult() );
+            cir.setReturnValue(cir.getReturnValue() * (serverLevel.getAttachedOrElse(BRAttachments.COOK_TIME_DATA, BRCookTime.DEFAULT)).multiplier() );
         }
     }
 

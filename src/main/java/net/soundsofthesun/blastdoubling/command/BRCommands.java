@@ -1,4 +1,4 @@
-package net.soundsofthesun.blastingReloaded.command;
+package net.soundsofthesun.blastdoubling.command;
 
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -6,9 +6,9 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
-import net.soundsofthesun.blastingReloaded.attachment.BRAttachments;
-import net.soundsofthesun.blastingReloaded.attachment.BRCookTime;
-import net.soundsofthesun.blastingReloaded.attachment.BRDoubling;
+import net.soundsofthesun.blastdoubling.attachment.BRAttachments;
+import net.soundsofthesun.blastdoubling.attachment.BRCookTime;
+import net.soundsofthesun.blastdoubling.attachment.BRDoubling;
 
 import static net.minecraft.server.permissions.Permissions.COMMANDS_ADMIN;
 
@@ -21,7 +21,7 @@ public class BRCommands {
                     .executes(BRCommands::help)
                     .then(Commands.literal("doubling_chance")
                             .executes(BRCommands::getDoublingChance)
-                            .then(Commands.argument("denominator", IntegerArgumentType.integer(1))
+                            .then(Commands.argument("denominator", IntegerArgumentType.integer(0))
                                     .executes(BRCommands::setDoublingChance)))
                     .then(Commands.literal("cook_time")
                             .executes(BRCommands::getCookTime)
@@ -33,12 +33,12 @@ public class BRCommands {
 
     private static int setCookTime(CommandContext<CommandSourceStack> context) {
         context.getSource().getServer().getAllLevels().forEach(level -> level.setAttached(BRAttachments.COOK_TIME_DATA, new BRCookTime(context.getArgument("cook_time", Integer.class))));
-        context.getSource().sendSuccess(() -> Component.literal("Blasting Cook Time: "+context.getSource().getLevel().getAttachedOrElse(BRAttachments.COOK_TIME_DATA, BRCookTime.DEFAULT).mult()), false);
+        context.getSource().sendSuccess(() -> Component.literal("Blasting Cook Time: "+context.getSource().getLevel().getAttachedOrElse(BRAttachments.COOK_TIME_DATA, BRCookTime.DEFAULT).multiplier()), false);
         return 1;
     }
 
     private static int getCookTime(CommandContext<CommandSourceStack> context) {
-        context.getSource().sendSuccess(() -> Component.literal("Blasting Cook Time: "+context.getSource().getLevel().getAttachedOrElse(BRAttachments.COOK_TIME_DATA, BRCookTime.DEFAULT).mult()), false);
+        context.getSource().sendSuccess(() -> Component.literal("Blasting Cook Time: "+context.getSource().getLevel().getAttachedOrElse(BRAttachments.COOK_TIME_DATA, BRCookTime.DEFAULT).multiplier()), false);
         return 1;
     }
 
@@ -56,7 +56,7 @@ public class BRCommands {
 
     private static int help(CommandContext<CommandSourceStack> context) {
         int doubling = context.getSource().getLevel().getAttachedOrElse(BRAttachments.DOUBLING_DATA, BRDoubling.DEFAULT).denominator();
-        int cookTime = context.getSource().getLevel().getAttachedOrElse(BRAttachments.COOK_TIME_DATA, BRCookTime.DEFAULT).mult();
+        int cookTime = context.getSource().getLevel().getAttachedOrElse(BRAttachments.COOK_TIME_DATA, BRCookTime.DEFAULT).multiplier();
         context.getSource().sendSuccess(() -> Component.literal("/blasting {cook_time/doubling_chance} (Integer)"), false);
         context.getSource().sendSuccess(() -> Component.literal("Cook Time: "+cookTime+". Doubling Chance: "+doubling+" (1/"+doubling+")."), false);
         return 1;
