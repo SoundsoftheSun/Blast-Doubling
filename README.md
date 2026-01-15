@@ -1,5 +1,3 @@
-# Blast Doubling
-
 Gives the Blast furnace a chance to produce extra outputs.
 
 Configurable by OPs with /blasting
