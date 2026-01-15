@@ -8,6 +8,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.soundsofthesun.blastdoubling.attachment.BRAttachments;
+import net.soundsofthesun.blastdoubling.attachment.BRBonus;
 import net.soundsofthesun.blastdoubling.attachment.BRCookTime;
 import net.soundsofthesun.blastdoubling.attachment.BRDoubling;
 
@@ -29,10 +30,31 @@ public class BRCommands {
                             .then(Commands.argument("cook_time", IntegerArgumentType.integer(1))
                                     .executes(BRCommands::setCookTime)))
                     .then(Commands.literal("play_sound")
+                            .executes(BRCommands::getDoSound)
                             .then(Commands.argument("boolean", BoolArgumentType.bool())
                                     .executes(BRCommands::setDoSound)))
+                    .then(Commands.literal("bonus")
+                            .executes(BRCommands::getBonus)
+                            .then(Commands.argument("number", IntegerArgumentType.integer(1))
+                                    .executes(BRCommands::setBonus)))
             );
         });
+    }
+
+    private static int getBonus(CommandContext<CommandSourceStack> context) {
+        context.getSource().sendSuccess(() -> Component.literal("Blasting Bonus: "+context.getSource().getLevel().getAttachedOrElse(BRAttachments.BONUS_DATA, BRBonus.DEFAULT).multiplier()), false);
+        return 1;
+    }
+
+    private static int setBonus(CommandContext<CommandSourceStack> context) {
+        context.getSource().getServer().getAllLevels().forEach(level -> level.setAttached(BRAttachments.BONUS_DATA, new BRBonus(context.getArgument("number", Integer.class))));
+        context.getSource().sendSuccess(() -> Component.literal("Blasting Bonus: "+context.getSource().getLevel().getAttachedOrElse(BRAttachments.BONUS_DATA, BRBonus.DEFAULT).multiplier()), false);
+        return 1;
+    }
+
+    private static int getDoSound(CommandContext<CommandSourceStack> context) {
+        context.getSource().sendSuccess(() -> Component.literal("Blasting Play Sound: "+context.getSource().getLevel().getAttachedOrElse(BRAttachments.DO_SOUND, true)), false);
+        return 1;
     }
 
     private static int setDoSound(CommandContext<CommandSourceStack> context) {

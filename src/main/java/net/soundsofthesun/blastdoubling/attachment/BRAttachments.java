@@ -24,6 +24,13 @@ public class BRAttachments {
                     .persistent(BRDoubling.CODEC)
     );
 
+    public static final AttachmentType<BRBonus> BONUS_DATA = AttachmentRegistry.create(
+            Identifier.fromNamespaceAndPath(BlastDoubling.MOD_ID, "bonus"),
+            builder->builder
+                    .initializer(()-> BRBonus.DEFAULT)
+                    .persistent(BRBonus.CODEC)
+    );
+
     public static final AttachmentType<Boolean> DO_SOUND = AttachmentRegistry.createPersistent(
             Identifier.fromNamespaceAndPath(BlastDoubling.MOD_ID, "play_sound"),
             Codec.BOOL

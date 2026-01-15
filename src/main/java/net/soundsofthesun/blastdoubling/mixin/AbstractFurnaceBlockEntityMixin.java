@@ -15,6 +15,7 @@ import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlastFurnaceBlockEntity;
 import net.soundsofthesun.blastdoubling.attachment.BRAttachments;
+import net.soundsofthesun.blastdoubling.attachment.BRBonus;
 import net.soundsofthesun.blastdoubling.attachment.BRCookTime;
 import net.soundsofthesun.blastdoubling.attachment.BRDoubling;
 import org.jspecify.annotations.Nullable;
@@ -41,12 +42,13 @@ public class AbstractFurnaceBlockEntityMixin {
                 ItemStack output = nonNullList.get(2);
                 if (!(output.isEmpty()) && ItemStack.isSameItemSameComponents(output, result)) {
                     int doubling = level.getAttachedOrElse(BRAttachments.DOUBLING_DATA, BRDoubling.DEFAULT).denominator();
+                    int bonus = level.getAttachedOrElse(BRAttachments.BONUS_DATA, BRBonus.DEFAULT).multiplier();
                     if (doubling == 1) {
-                        output.grow(1);
+                        output.grow(bonus);
                     } else if (doubling == 0) {
                         return true;
                     } else if (level.getRandom().nextInt(doubling) == 0) {
-                        output.grow(1);
+                        output.grow(bonus);
                         if (level.getAttachedOrElse(BRAttachments.DO_SOUND, true)) level.playSound(null, abe.getBlockPos(), SoundEvents.FIRECHARGE_USE, SoundSource.BLOCKS, 0.25f, 0.4f);
                     }
                 }
